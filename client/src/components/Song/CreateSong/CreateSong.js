@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import { Redirect } from "react-router-dom";
 
 class CreateSongBtn extends Component {
     constructor(props){

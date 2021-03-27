@@ -1,17 +1,40 @@
 import { Component } from 'react'
+import { withRouter  } from 'react-router';
 
 class CreatePlaylist extends Component{
+
+    onCreatePlaylistClick(e){
+        e.preventDefault()
+        let playlistObj ={
+            title: e.target.title.value,
+            imgUrl: e.target.thumbnail.value
+        }
+        fetch(`http://localhost:5000/playlist/createPlaylist`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playlistObj)
+        })
+        .then(res => res.json())
+        .then(playlist =>{
+            e.target.reset()
+            this.props.history.push(`/playlist/${playlist._id}/details`)
+        })
+
+    }
+
     render(){
         return(
             <>
-            <form method="POST">
+            <form onSubmit={e => this.onCreatePlaylistClick(e)} method="POST">
                 <h1>Create Playlist</h1>
 
-                <label for="username">Title:</label>
+                <label htmlFor="username">Title:</label>
                 <input type="text" name="title" placeholder="Title"></input>
 
-                <label for="password">Upload Thumbnail:</label>
-                <input type="file" name="thumbnail" accept="image/*"></input>
+                <label htmlFor="password">Upload Thumbnail:</label>
+                <input type="text" name="thumbnail" placeholder="Image Url"></input>
 
                 <button type="submit">Create</button>
 
@@ -67,4 +90,4 @@ class CreatePlaylist extends Component{
     }
 }
 
-export default CreatePlaylist
+export default withRouter(CreatePlaylist)

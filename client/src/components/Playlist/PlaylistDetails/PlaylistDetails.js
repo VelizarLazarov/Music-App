@@ -10,6 +10,7 @@ class PlaylistDetails extends Component{
             showSongForm: false,
             playlist: {}
         }
+        this.mounted = true;
         this.onAddSongClick = this.onAddSongClick.bind(this);
     }
 
@@ -22,8 +23,10 @@ class PlaylistDetails extends Component{
     componentDidMount(){
         fetch(`http://localhost:5000${this.props.match.url}`)
         .then(res => res.json())
-        .then(res => this.setState({playlist: res}))
-        .catch(err => console.log(err))        
+        .then(res => {
+            if(this.mounted) this.setState({playlist: res})
+        })
+        .catch(err => console.log(err))   
     }
 
     componentDidUpdate(prevProps,prevState){
@@ -32,16 +35,22 @@ class PlaylistDetails extends Component{
         }
         fetch(`http://localhost:5000${this.props.match.url}`)
         .then(res => res.json())
-        .then(res => this.setState({playlist: res}))
+        .then(res => {
+            if(this.mounted) this.setState({playlist: res})
+        })
         .catch(err => console.log(err))        
+    }
+
+    componentWillUnmount(){
+        this.mounted = false;
     }
 
     render(){
         return(
             <>
-            <div className="bgWrapper"><img className="detailsBackground" src="https://i.pinimg.com/originals/5f/57/97/5f57975854202953a60b77d2f231f236.jpg" alt="thumbnail background"/></div>
+            <div className="bgWrapper"><img className="detailsBackground" src={this.state.playlist.imgUrl} alt="thumbnail background"/></div>
             <div className="playlistHeader">
-                <img className="playlistDetailsThumbnail" src="https://i.pinimg.com/originals/5f/57/97/5f57975854202953a60b77d2f231f236.jpg" alt="album thumbnail"/>
+                <img className="playlistDetailsThumbnail" src={this.state.playlist.imgUrl} alt="album thumbnail"/>
                 <h1>{this.state.playlist.title}</h1>
                 <h3>0 songs</h3>
                 <h3>{this.state.playlist.likes} likes</h3>

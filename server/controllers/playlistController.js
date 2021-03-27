@@ -1,6 +1,12 @@
 const router = require('express').Router();
 const playlistService = require('../services/playlistService');
 
+router.post('/createPlaylist', (req,res) =>{
+    playlistService.create(req.body)
+    .then(pl => res.send(pl))
+    .catch(err => console.log(err))
+})
+
 router.get('/:id/details', (req,res) =>{
     playlistService.getOne(req.params.id)
     .then(pl => {
