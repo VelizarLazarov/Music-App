@@ -32,7 +32,10 @@ class Dashboard extends Component{
 
             <style jsx="true">{`
                 .playlistContainer{
+                    box-sizing: border-box;
                     display: flex;
+                    flex-wrap: wrap;
+                    width:100%;
                     justify-content: center;
                 }
             `}</style>

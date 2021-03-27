@@ -21,10 +21,12 @@ function App() {
           margin-top:73px;
           padding-bottom:50px;
           min-height:100%;
+          
       }
       html body{
         height:100%;
         background-color:#1e2124;
+        
       }
       `}</style>
     </>

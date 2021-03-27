@@ -21,6 +21,7 @@ class PlaylistCard extends Component {
                 .cardnav{
                     text-decoration:none;
                     margin-left:25px;
+                    margin-top:25px;
                 }
                 .cardWrapper{
                     width:240px;
