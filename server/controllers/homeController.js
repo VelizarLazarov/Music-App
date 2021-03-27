@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
     .then(pl => {
         res.send(pl)
     })
+    .catch(err => console.log(err))
 })
 
 module.exports = router

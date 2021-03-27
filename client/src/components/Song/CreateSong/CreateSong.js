@@ -1,21 +1,43 @@
 import { Component } from 'react'
+import { Redirect } from "react-router-dom";
 
 class CreateSongBtn extends Component {
+    constructor(props){
+        super(props)
+
+        this.onAddSongClick = this.onAddSongClick.bind(this)
+    }
+    onAddSongClick(e){
+        e.preventDefault();
+        let songObj = {
+            title: e.target.title.value,
+            artist: e.target.artist.value,
+            songLink: e.target.songLink.value
+        }
+        fetch(`http://localhost:5000/playlist/${this.props.parentId}/addSong`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(songObj)
+        })
+        .then(() =>{
+            e.target.reset()
+        })
+    }
     render() {
         return (
             <>
-                
-
-                <form method="POST">
+                <form onSubmit={e =>this.onAddSongClick(e)} className="addSongCard">
                 <h2>Add Song</h2>
 
-                <label for="title">Title:</label>
+                <label htmlFor="title">Title:</label>
                 <input type="text" name="title" placeholder="Title"></input>
 
-                <label for="artist">Artist:</label>
+                <label htmlFor="artist">Artist:</label>
                 <input type="text" name="artist" placeholder="Artist"></input>
 
-                <label for="artist">File Upload:</label>
+                <label htmlFor="artist">File Upload:</label>
                 <input type="file" name="songFile"  accept="audio/*"></input>
 
                 <h2>Or youtube link</h2>
@@ -26,7 +48,7 @@ class CreateSongBtn extends Component {
                 </form>
 
                 <style jsx="true">{`
-                    form{
+                    .addSongCard{
                         position:absolute;
                         left:28.1%;
                         top:0;
@@ -57,11 +79,11 @@ class CreateSongBtn extends Component {
                         margin-top:10px;
                         background-color:#7289da;
                         border: none;
+                        outline: none;
                         color: white;
                         padding: 15px 32px;
                         border-radius: 5px;
                         font-size:large;
-                        
                     }
                     form button:hover{
                         cursor:pointer;

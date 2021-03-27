@@ -7,13 +7,33 @@ class PlaylistDetails extends Component{
         super(props)
 
         this.state = {
-            showSongForm: false
+            showSongForm: false,
+            playlist: {}
         }
         this.onAddSongClick = this.onAddSongClick.bind(this);
     }
 
     onAddSongClick(){
         this.setState({showSongForm:!this.state.showSongForm});
+        //console.log(this.state.playlist._id)
+
+    }
+
+    componentDidMount(){
+        fetch(`http://localhost:5000${this.props.match.url}`)
+        .then(res => res.json())
+        .then(res => this.setState({playlist: res}))
+        .catch(err => console.log(err))        
+    }
+
+    componentDidUpdate(prevProps,prevState){
+        if(prevState.playlist.songs === this.state.playlist.songs){
+           return
+        }
+        fetch(`http://localhost:5000${this.props.match.url}`)
+        .then(res => res.json())
+        .then(res => this.setState({playlist: res}))
+        .catch(err => console.log(err))        
     }
 
     render(){
@@ -22,11 +42,11 @@ class PlaylistDetails extends Component{
             <div className="bgWrapper"><img className="detailsBackground" src="https://i.pinimg.com/originals/5f/57/97/5f57975854202953a60b77d2f231f236.jpg" alt="thumbnail background"/></div>
             <div className="playlistHeader">
                 <img className="playlistDetailsThumbnail" src="https://i.pinimg.com/originals/5f/57/97/5f57975854202953a60b77d2f231f236.jpg" alt="album thumbnail"/>
-                <h1>Album Title</h1>
-                <h3>song count</h3>
-                <h3>likes</h3>
+                <h1>{this.state.playlist.title}</h1>
+                <h3>0 songs</h3>
+                <h3>{this.state.playlist.likes} likes</h3>
                 <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>
-                {this.state.showSongForm ? <CreateSong/> : null }
+                {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
 
             </div>
             <div className="playlistBody">
@@ -35,8 +55,10 @@ class PlaylistDetails extends Component{
                     <h2>Artist</h2>
                     <h2>Length</h2>
                 </div>
-                <Song/>
-                <Song/>
+                {this.state.playlist.songs ? 
+                    this.state.playlist.songs.map(p => <Song key={p._id} data={p}/>) :
+                    null
+                }
             </div>
             <style jsx="true">{`
             .createSongBtn{

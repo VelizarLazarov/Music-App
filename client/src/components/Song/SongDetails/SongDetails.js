@@ -1,12 +1,16 @@
+/* eslint-disable no-useless-constructor */
 import { Component } from 'react'
 
 class SongDetails extends Component{
+    constructor(props){
+        super(props)
+    }
     render(){
         return(
             <>
             <div className="songDetails">
-                <h3>Song titleasdadasdasd</h3>
-                <h3>Artistasdasdasd</h3>
+                <h3>{this.props.data.title}</h3>
+                <h3>{this.props.data.artist}</h3>
                 <h3>lengthasdasd</h3>
             </div>
             <style jsx="true">{`

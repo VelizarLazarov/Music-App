@@ -24,7 +24,8 @@ class Dashboard extends Component{
             <DashNavigation/>
             <div className="playlistContainer">
                 {this.state.playlists.map(p => 
-                    <PlaylistCard key={p._id} data={p}/>)}
+                    <PlaylistCard key={p._id} data={p}/>)
+                }
                     
             </div>
 
