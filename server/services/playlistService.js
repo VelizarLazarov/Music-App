@@ -12,6 +12,7 @@ const createSong = (songData) => {
 
     return song.save();
 }
+const updateOne = (listId) => Playlist.findByIdAndUpdate(listId, {$inc: {likes: 1}})
 
 const addSongToList = (listId, songId) => Playlist.findByIdAndUpdate(listId, {$push: {songs: songId}})
 
@@ -19,4 +20,4 @@ const getAll = () => Playlist.find({}).lean()
 
 const getOne = (inputId) => Playlist.findById(inputId).populate('songs').lean()
 
-module.exports = {create, createSong, getAll, getOne, addSongToList}
+module.exports = {create, createSong, getAll, getOne, addSongToList,updateOne}

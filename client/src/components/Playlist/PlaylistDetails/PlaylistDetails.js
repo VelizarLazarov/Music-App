@@ -12,12 +12,21 @@ class PlaylistDetails extends Component{
         }
         this.mounted = true;
         this.onAddSongClick = this.onAddSongClick.bind(this);
+        this.onLikeClick = this.onLikeClick.bind(this);
     }
 
     onAddSongClick(){
         this.setState({showSongForm:!this.state.showSongForm});
-        //console.log(this.state.playlist._id)
 
+    }
+    onLikeClick(){
+        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like`,{
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(this.mounted) this.setState({...this.state, likes:this.state.likes + 1})
+        })
+        .catch(err => console.log(err))
     }
 
     componentDidMount(){
@@ -54,8 +63,11 @@ class PlaylistDetails extends Component{
                 <h1>{this.state.playlist.title}</h1>
                 <h3>0 songs</h3>
                 <h3>{this.state.playlist.likes} likes</h3>
+                
                 <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>
                 {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
+
+                <button className="likeSongBtn" onClick={this.onLikeClick}>Like Playlist</button>
 
             </div>
             <div className="playlistBody">
@@ -70,6 +82,22 @@ class PlaylistDetails extends Component{
                 }
             </div>
             <style jsx="true">{`
+            .likeSongBtn{
+                position:relative;
+                top:25%;
+                left:60%;
+                background-color:#7289da;
+                border: none;
+                outline:none;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+                font-size:large;
+                text-decoration:none;
+                color:white;
+                border:none;
+                font-weight:400;
+            }
             .createSongBtn{
                 position:relative;
                 top:25%;
@@ -87,6 +115,9 @@ class PlaylistDetails extends Component{
                 font-weight:400;
             }
             .createSongBtn:hover{
+                cursor:pointer;
+            }
+            .likeSongBtn:hover{
                 cursor:pointer;
             }
                 .songHeaders{

@@ -15,6 +15,14 @@ router.get('/:id/details', (req,res) =>{
     .catch(err => console.log(err))
 })
 
+router.get('/:id/like', (req,res) => {
+    playlistService.updateOne(req.params.id)
+    .then(pl => {
+        res.send(pl)
+    })
+    .catch(err => console.log(err))
+})
+
 router.post('/:id/addSong', (req,res) => {
     const songObj = {
         title: req.body.title,
