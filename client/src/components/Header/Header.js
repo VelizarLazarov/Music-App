@@ -11,11 +11,17 @@ class Header extends Component {
         this.state = {
             showRegister:false,
             showLogin:false,
-            showPlaylistCreate:false
+            showPlaylistCreate:false,
+            isLoggedIn: window.localStorage.getItem("token")
         }
         this.onRegisterClick = this.onRegisterClick.bind(this);
         this.onLoginClick = this.onLoginClick.bind(this);
+        this.loginSubmitHandler = this.loginSubmitHandler.bind(this);
         this.onPlaylistCreateClick = this.onPlaylistCreateClick.bind(this);
+    }
+
+    loginSubmitHandler(){
+        this.setState({isLoggedIn:window.localStorage.getItem("token")});
     }
 
     onRegisterClick(){
@@ -37,15 +43,24 @@ class Header extends Component {
             <>
             <nav className="header">
                 <ul>
-                    <Link to="/"><NavigationItem>My Playlists</NavigationItem></Link>      
-                    <button className="authFormBtn" onClick={this.onPlaylistCreateClick}>Create Playlist</button>
-                    {this.state.showPlaylistCreate ? <CreatePlaylist/> : null }
-                    <Link to="/"><NavigationItem>Home</NavigationItem></Link>      
+                    {this.state.isLoggedIn ? 
+                    <>
+                        <Link to="/"><NavigationItem>My Playlists</NavigationItem></Link>      
+                        <button className="authFormBtn" onClick={this.onPlaylistCreateClick}>Create Playlist</button>
+                        {this.state.showPlaylistCreate ? <CreatePlaylist/> : null }
+                    </>
+                    : 
+                    <>
                     <button className="authFormBtn" onClick={this.onRegisterClick}>Register</button>
                     {this.state.showRegister ? <Register/> : null }
 
                     <button className="authFormBtn" onClick={this.onLoginClick}>Login</button>
-                    {this.state.showLogin ? <Login/> : null }        
+                    {this.state.showLogin ? <Login handler={this.loginSubmitHandler}/> : null }    
+                    </>    
+
+                    
+                    }
+                    <Link to="/"><NavigationItem>Home</NavigationItem></Link>      
                 </ul>
                 
             </nav> 

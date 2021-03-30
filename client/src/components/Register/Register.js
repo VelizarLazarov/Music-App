@@ -1,10 +1,34 @@
 import { Component } from 'react'
 
 class Register extends Component{
+    constructor(props){
+        super(props)
+
+        this.onRegisterSubmit = this.onRegisterSubmit.bind(this);
+    }
+
+    onRegisterSubmit(e){
+        e.preventDefault();
+        const username = e.target.username.value;
+        const password = e.target.password.value;
+        //const rePassword = e.target.repeatPassword.value;
+
+        fetch('http://localhost:5000/auth/register',{method:"POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({username,password})})
+        .then(() => {
+            e.target.reset()
+        })
+        
+    }
+
     render(){
         return(
             <>
-            <form method="POST">
+            <form  onSubmit={this.onRegisterSubmit}>
                 <h1>Register</h1>
 
                 <label for="username">Username:</label>
@@ -15,6 +39,7 @@ class Register extends Component{
 
                 <label for="repeatPassword">Repeat Password:</label>
                 <input id="repeatPassword"  name="repeatPassword" placeholder="Repeat Password"></input>
+                
                 <button type="submit">Register</button>
 
             </form>
