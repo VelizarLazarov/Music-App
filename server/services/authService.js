@@ -8,6 +8,10 @@ const register = (username,password) => {
     return user.save();
 }
 
+const addLikedList = (userId, listId) => User.findByIdAndUpdate(userId, {$push: {likedPlaylists: listId}})
+
+const getUser = (param) => User.findOne({username:param}).lean();
+
 const login = async (name,password) => {
     let user = await User.findOne({username: name});
 
@@ -21,4 +25,4 @@ const login = async (name,password) => {
     }
 }
 
-module.exports = {register,login}
+module.exports = {register, login, getUser, addLikedList}

@@ -8,7 +8,10 @@ class PlaylistDetails extends Component{
 
         this.state = {
             showSongForm: false,
-            playlist: {}
+            showLikeBtn: false,
+            playlist: {},
+            user:{},
+            userHasLiked: false
         }
         this.mounted = true;
         this.onAddSongClick = this.onAddSongClick.bind(this);
@@ -20,22 +23,35 @@ class PlaylistDetails extends Component{
 
     }
     onLikeClick(){
-        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like`,{
+        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like/${this.state.user._id}`,{
         })
-        .then(res => res.json())
-        .then(res => {
-            if(this.mounted) this.setState({...this.state, likes:this.state.likes + 1})
+        .then(() => {
+            if(this.mounted) {
+                this.setState({...this.state, likes:this.state.likes + 1})
+                this.setState({userHasLiked:true})
+            }
         })
         .catch(err => console.log(err))
     }
 
     componentDidMount(){
-        fetch(`http://localhost:5000${this.props.match.url}`)
-        .then(res => res.json())
-        .then(res => {
-            if(this.mounted) this.setState({playlist: res})
+        Promise.all([
+            fetch(`http://localhost:5000${this.props.match.url}`).then(res => res.json()),
+            window.localStorage.getItem("username") ?
+            fetch(`http://localhost:5000/auth/getUser/${window.localStorage.getItem("username")}`).then(res => res.json())
+            : null
+        ]).then(([playlistData, userData]) => {
+            if(this.mounted){
+                this.setState({playlist: playlistData})
+                if(userData){
+                this.setState({user: userData})
+                this.setState({showLikeBtn: true})
+                this.setState({userHasLiked: userData.likedPlaylists.find(listId => listId === this.state.playlist._id)})
+                }
+            }
         })
-        .catch(err => console.log(err))   
+        .catch(err => console.log(err))  
+        
     }
 
     componentDidUpdate(prevProps,prevState){
@@ -67,7 +83,14 @@ class PlaylistDetails extends Component{
                 <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>
                 {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
 
-                <button className="likeSongBtn" onClick={this.onLikeClick}>Like Playlist</button>
+                {this.state.showLikeBtn ?
+                    this.state.userHasLiked ? 
+                        null
+                        :
+                        <button className="likeSongBtn" onClick={this.onLikeClick}>Like Playlist</button>
+                :
+                null
+                }
 
             </div>
             <div className="playlistBody">

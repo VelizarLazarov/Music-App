@@ -12,6 +12,13 @@ router.post('/register', (req,res) => {
     .catch(err => console.log(err))
 })
 
+router.get('/getUser/:username', (req,res) => {
+    authService.getUser(req.params.username)
+    .then(user => {
+        res.send(user)
+    })
+})
+
 router.post('/login',(req,res) => {
     let { username, password } = req.body;
     

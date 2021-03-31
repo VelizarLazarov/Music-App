@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     playlists:[{
         type:mongoose.Types.ObjectId,
         ref:'Playlist'
+    }],
+    likedPlaylists:[{
+        type:mongoose.Types.ObjectId,
+        ref:'Playlist'
     }]
 })
 

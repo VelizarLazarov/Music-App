@@ -12,7 +12,7 @@ const createSong = (songData) => {
 
     return song.save();
 }
-const updateOne = (listId) => Playlist.findByIdAndUpdate(listId, {$inc: {likes: 1}})
+const updateOne = (listId) =>Playlist.findByIdAndUpdate(listId, {$inc: {likes: 1}})
 
 const addSongToList = (listId, songId) => Playlist.findByIdAndUpdate(listId, {$push: {songs: songId}})
 

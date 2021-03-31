@@ -20,7 +20,8 @@ class Register extends Component{
         },
         body:JSON.stringify({username,password})})
         .then(() => {
-            e.target.reset()
+            e.target.reset();
+            this.props.handler();
         })
         
     }

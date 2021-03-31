@@ -18,6 +18,13 @@ class Header extends Component {
         this.onLoginClick = this.onLoginClick.bind(this);
         this.loginSubmitHandler = this.loginSubmitHandler.bind(this);
         this.onPlaylistCreateClick = this.onPlaylistCreateClick.bind(this);
+        this.onLogoutClick = this.onLogoutClick.bind(this);
+    }
+
+    onLogoutClick(){
+        window.localStorage.clear();
+        this.setState({isLoggedIn: window.localStorage.getItem("token")});
+        this.setState({showLogin: !this.state.showLogin});
     }
 
     loginSubmitHandler(){
@@ -48,11 +55,12 @@ class Header extends Component {
                         <Link to="/"><NavigationItem>My Playlists</NavigationItem></Link>      
                         <button className="authFormBtn" onClick={this.onPlaylistCreateClick}>Create Playlist</button>
                         {this.state.showPlaylistCreate ? <CreatePlaylist/> : null }
+                        <button className="authFormBtn" onClick={this.onLogoutClick}>Logout</button>
                     </>
                     : 
                     <>
                     <button className="authFormBtn" onClick={this.onRegisterClick}>Register</button>
-                    {this.state.showRegister ? <Register/> : null }
+                    {this.state.showRegister ? <Register handler={this.onLoginClick}/> : null }
 
                     <button className="authFormBtn" onClick={this.onLoginClick}>Login</button>
                     {this.state.showLogin ? <Login handler={this.loginSubmitHandler}/> : null }    

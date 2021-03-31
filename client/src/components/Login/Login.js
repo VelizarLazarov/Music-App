@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-class Register extends Component{
+class Login extends Component{
     constructor(props){
         super(props)
 
@@ -21,7 +21,8 @@ class Register extends Component{
         .then(res => res.json())
         .then(res => {
             //console.log(res["token"])
-            window.localStorage.setItem("token",res["token"]);    
+            window.localStorage.setItem("token",res["token"]); 
+            window.localStorage.setItem("username", username)   
             this.props.handler();        
         })
         .then(() => {
@@ -94,4 +95,4 @@ class Register extends Component{
     }
 }
 
-export default Register
+export default Login
