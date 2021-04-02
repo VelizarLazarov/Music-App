@@ -55,15 +55,17 @@ class PlaylistDetails extends Component{
     }
 
     componentDidUpdate(prevProps,prevState){
-        if(prevState.playlist.songs === this.state.playlist.songs){
-           return
-        }
         fetch(`http://localhost:5000${this.props.match.url}`)
         .then(res => res.json())
         .then(res => {
             if(this.mounted) this.setState({playlist: res})
         })
-        .catch(err => console.log(err))        
+        .catch(err => console.log(err))    
+        if(JSON.stringify(prevState.playlist) === JSON.stringify(this.state.playlist)){
+           return
+        }
+        console.log(JSON.stringify(prevState.playlist))
+        console.log(JSON.stringify(this.state.playlist))
     }
 
     componentWillUnmount(){
@@ -77,8 +79,8 @@ class PlaylistDetails extends Component{
             <div className="playlistHeader">
                 <img className="playlistDetailsThumbnail" src={this.state.playlist.imgUrl} alt="album thumbnail"/>
                 <h1>{this.state.playlist.title}</h1>
-                <h3>0 songs</h3>
-                <h3>{this.state.playlist.likes} likes</h3>
+                <h3>{this.state.playlist.songs ? this.state.playlist.songs.length : 0} songs</h3>
+                <h3>{this.state.playlist.likes ?? 0} likes</h3>
                 
                 <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>
                 {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
