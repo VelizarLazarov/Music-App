@@ -52,7 +52,7 @@ class Header extends Component {
                 <ul>
                     {this.state.isLoggedIn ? 
                     <>
-                        <Link to="/"><NavigationItem>My Playlists</NavigationItem></Link>      
+                        <Link to={`/profile/${window.localStorage.getItem("username")}`}><NavigationItem>My Playlists</NavigationItem></Link>      
                         <button className="authFormBtn" onClick={this.onPlaylistCreateClick}>Create Playlist</button>
                         {this.state.showPlaylistCreate ? <CreatePlaylist/> : null }
                         <button className="authFormBtn" onClick={this.onLogoutClick}>Logout</button>

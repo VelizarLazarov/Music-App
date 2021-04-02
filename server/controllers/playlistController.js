@@ -2,9 +2,20 @@ const router = require('express').Router();
 const playlistService = require('../services/playlistService');
 const authService = require('../services/authService');
 
-router.post('/createPlaylist', (req,res) =>{
-    playlistService.create(req.body)
-    .then(pl => res.send(pl))
+router.post('/createPlaylist/:userId', async (req,res) =>{
+    let playlist = await playlistService.create(req.body)
+    
+    console.log(playlist)
+    await authService.createPlaylist(req.params.userId, playlist._id)
+
+    res.send(playlist)
+})
+
+router.get('/createdBy/:username', (req,res) => {
+    authService.getUserPlaylists(req.params.username)
+    .then(user => {
+        res.send(user.playlists)
+    })
     .catch(err => console.log(err))
 })
 

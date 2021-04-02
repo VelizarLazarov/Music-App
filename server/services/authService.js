@@ -8,9 +8,13 @@ const register = (username,password) => {
     return user.save();
 }
 
+const createPlaylist = (name, listId) => User.findOneAndUpdate({username:name}, {$push: {playlists: listId}})
+
 const addLikedList = (userId, listId) => User.findByIdAndUpdate(userId, {$push: {likedPlaylists: listId}})
 
-const getUser = (param) => User.findOne({username:param}).lean();
+const getUser = (name) => User.findOne({username:name}).lean();
+
+const getUserPlaylists = (name) => User.findOne({username:name}).populate('playlists')
 
 const login = async (name,password) => {
     let user = await User.findOne({username: name});
@@ -25,4 +29,4 @@ const login = async (name,password) => {
     }
 }
 
-module.exports = {register, login, getUser, addLikedList}
+module.exports = {register, login, getUser, addLikedList, createPlaylist, getUserPlaylists}

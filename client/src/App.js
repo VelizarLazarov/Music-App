@@ -2,6 +2,7 @@ import { Route, Switch } from 'react-router-dom'
 import Header from './components/Header/Header'
 import Dashboard from './components/Dashboard/Dashboard'
 import PlaylistDetails from './components/Playlist/PlaylistDetails/PlaylistDetails'
+import UserPlaylists from './components/Playlist/UserPlaylists/UserPlaylists.js'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Dashboard}/>
           <Route path="/playlist/:id/details" component={PlaylistDetails}/>
+          <Route path="/profile/:name" component={UserPlaylists}/>
         </Switch>
 
       </div>

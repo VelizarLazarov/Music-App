@@ -9,7 +9,7 @@ class CreatePlaylist extends Component{
             title: e.target.title.value,
             imgUrl: e.target.thumbnail.value
         }
-        fetch(`http://localhost:5000/playlist/createPlaylist`,{
+        fetch(`http://localhost:5000/playlist/createPlaylist/${window.localStorage.getItem("username")}`,{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'

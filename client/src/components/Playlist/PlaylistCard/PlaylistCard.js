@@ -12,7 +12,7 @@ class PlaylistCard extends Component {
                         <div className="playlistStats">
                             <h4>{this.props.data.title}</h4>
                             <p>song count: {this.props.data.songs.length}</p>
-                            <p>likes: {this.props.data.likes}</p>
+                            <p>likes: {this.props.data.likes ?? 0}</p>
                         </div>
                     </div> 
                 </div>
