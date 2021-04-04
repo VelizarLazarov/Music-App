@@ -2,6 +2,15 @@ const router = require('express').Router();
 const playlistService = require('../services/playlistService');
 const authService = require('../services/authService');
 
+router.patch('/:id/update', (req,res) =>{
+        let title = req.body.title
+        let imgUrl = req.body.imgUrl
+
+    playlistService.updatePlaylist(req.params.id, title, imgUrl)
+    .then(() => res.end())
+    .catch(err => console.log(err))
+})
+
 router.post('/createPlaylist/:username', async (req,res) =>{
     let creator = await authService.getUser(req.params.username)
     let playlist = await playlistService.create(req.body, creator._id)
@@ -53,6 +62,7 @@ router.post('/:id/addSong', (req,res) => {
         playlistService.addSongToList(req.params.id, song._id)
         .then(()=>res.end())
     })
+    .catch(err => console.log(err))
 })
 
 

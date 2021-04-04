@@ -1,12 +1,14 @@
 import { Component } from 'react'
 import Song from '../../Song/SongDetails/SongDetails'
 import CreateSong from '../../Song/CreateSong/CreateSong'
+import EditPlaylist from '../EditPlaylist/EditPlaylist'
 
 class PlaylistDetails extends Component{
     constructor(props){
         super(props)
 
         this.state = {
+            showEditForm:false,
             showSongForm: false,
             showLikeBtn: false,
             playlist: {},
@@ -18,6 +20,11 @@ class PlaylistDetails extends Component{
         this.onAddSongClick = this.onAddSongClick.bind(this);
         this.onLikeClick = this.onLikeClick.bind(this);
         this.onDeleteSongClick = this.onDeleteSongClick.bind(this);
+        this.onEditClick = this.onEditClick.bind(this);
+    }
+
+    onEditClick(){
+        this.setState({showEditForm:!this.state.showEditForm});
     }
 
     onAddSongClick(){
@@ -100,8 +107,14 @@ class PlaylistDetails extends Component{
                         :
                         <button className="likeSongBtn" onClick={this.onLikeClick}>Like Playlist</button>
                 :
+                null}
+
+                {this.state.userIsPlaylistCreator ? 
+                <button className="editPlaylistBtn" onClick={this.onEditClick}>Edit Playlist</button>:
                 null
                 }
+                {this.state.showEditForm ? <EditPlaylist parentId={this.state.playlist._id}
+                 title={this.state.playlist.title} imgUrl={this.state.playlist.imgUrl}/> : null}
 
             </div>
             <div className="playlistBody">
@@ -117,6 +130,22 @@ class PlaylistDetails extends Component{
                 }
             </div>
             <style jsx="true">{`
+            .editPlaylistBtn{
+                position:fixed;
+                top:40%;
+                left:800px;
+                background-color:#7289da;
+                border: none;
+                outline:none;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+                font-size:large;
+                text-decoration:none;
+                color:white;
+                border:none;
+                font-weight:400;
+            }
             .likeSongBtn{
                 position:relative;
                 top:25%;
@@ -150,6 +179,9 @@ class PlaylistDetails extends Component{
                 font-weight:400;
             }
             .createSongBtn:hover{
+                cursor:pointer;
+            }
+            .editPlaylistBtn:hover{
                 cursor:pointer;
             }
             .likeSongBtn:hover{
