@@ -11,16 +11,22 @@ class PlaylistDetails extends Component{
             showLikeBtn: false,
             playlist: {},
             user:{},
-            userHasLiked: false
+            userHasLiked: false,
+            userIsPlaylistCreator: false
         }
         this.mounted = true;
         this.onAddSongClick = this.onAddSongClick.bind(this);
         this.onLikeClick = this.onLikeClick.bind(this);
+        this.onDeleteSongClick = this.onDeleteSongClick.bind(this);
     }
 
     onAddSongClick(){
         this.setState({showSongForm:!this.state.showSongForm});
 
+    }
+    onDeleteSongClick(songId){
+        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/delete/${songId}`, {method:'DELETE'})
+        .then(pl => this.setState({playlist: pl}))
     }
     onLikeClick(){
         fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like/${this.state.user._id}`,{
@@ -46,6 +52,7 @@ class PlaylistDetails extends Component{
                 if(userData){
                 this.setState({user: userData})
                 this.setState({showLikeBtn: true})
+                this.setState({userIsPlaylistCreator:this.state.user._id === this.state.playlist.creator})
                 this.setState({userHasLiked: userData.likedPlaylists.find(listId => listId === this.state.playlist._id)})
                 }
             }
@@ -64,8 +71,7 @@ class PlaylistDetails extends Component{
         if(JSON.stringify(prevState.playlist) === JSON.stringify(this.state.playlist)){
            return
         }
-        console.log(JSON.stringify(prevState.playlist))
-        console.log(JSON.stringify(this.state.playlist))
+        
     }
 
     componentWillUnmount(){
@@ -82,7 +88,10 @@ class PlaylistDetails extends Component{
                 <h3>{this.state.playlist.songs ? this.state.playlist.songs.length : 0} songs</h3>
                 <h3>{this.state.playlist.likes ?? 0} likes</h3>
                 
-                <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>
+                {this.state.userIsPlaylistCreator ?
+                <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>:
+                null       
+                }
                 {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
 
                 {this.state.showLikeBtn ?
@@ -102,7 +111,8 @@ class PlaylistDetails extends Component{
                     <h2>Length</h2>
                 </div>
                 {this.state.playlist.songs ? 
-                    this.state.playlist.songs.map(p => <Song key={p._id} data={p}/>) :
+                    this.state.playlist.songs.map(p => <Song key={p._id} data={p} 
+                        isCreator={this.state.userIsPlaylistCreator} delete={this.onDeleteSongClick}/>) :
                     null
                 }
             </div>

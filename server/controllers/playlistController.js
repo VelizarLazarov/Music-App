@@ -2,11 +2,11 @@ const router = require('express').Router();
 const playlistService = require('../services/playlistService');
 const authService = require('../services/authService');
 
-router.post('/createPlaylist/:userId', async (req,res) =>{
-    let playlist = await playlistService.create(req.body)
+router.post('/createPlaylist/:username', async (req,res) =>{
+    let creator = await authService.getUser(req.params.username)
+    let playlist = await playlistService.create(req.body, creator._id)
     
-    console.log(playlist)
-    await authService.createPlaylist(req.params.userId, playlist._id)
+    await authService.createPlaylist(req.params.username, playlist._id)
 
     res.send(playlist)
 })
@@ -19,6 +19,12 @@ router.get('/createdBy/:username', (req,res) => {
     .catch(err => console.log(err))
 })
 
+router.delete('/:listId/delete/:songId', (req,res) => {
+    playlistService.deleteSong(req.params.listId, req.params.songId)
+    .then(pl => res.send(pl))
+    .catch(err => console.log(err))
+})
+
 router.get('/:id/details', (req,res) =>{
     playlistService.getOne(req.params.id)
     .then(pl => {
@@ -28,7 +34,7 @@ router.get('/:id/details', (req,res) =>{
 })
 
 router.get('/:songId/like/:userId', async (req,res) => {
-    await playlistService.updateOne(req.params.songId)
+    await playlistService.likePlaylist(req.params.songId)
     await authService.addLikedList(req.params.userId, req.params.songId)
 
     res.end()

@@ -12,6 +12,10 @@ const playlistSchema = new mongoose.Schema({
     likes:{
         type:Number
     },
+    creator:{
+        type:mongoose.Types.ObjectId,
+        required:true
+    },
     songs:[{
         type:mongoose.Types.ObjectId,
         ref:'Song'
