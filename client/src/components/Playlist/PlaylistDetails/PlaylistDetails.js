@@ -2,6 +2,8 @@ import { Component } from 'react'
 import Song from '../../Song/SongDetails/SongDetails'
 import CreateSong from '../../Song/CreateSong/CreateSong'
 import EditPlaylist from '../EditPlaylist/EditPlaylist'
+import { withRouter  } from 'react-router';
+
 
 class PlaylistDetails extends Component{
     constructor(props){
@@ -20,6 +22,7 @@ class PlaylistDetails extends Component{
         this.onAddSongClick = this.onAddSongClick.bind(this);
         this.onLikeClick = this.onLikeClick.bind(this);
         this.onDeleteSongClick = this.onDeleteSongClick.bind(this);
+        this.onDeletePlaylistClick = this.onDeletePlaylistClick.bind(this);
         this.onEditClick = this.onEditClick.bind(this);
     }
 
@@ -34,6 +37,11 @@ class PlaylistDetails extends Component{
     onDeleteSongClick(songId){
         fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/delete/${songId}`, {method:'DELETE'})
         .then(pl => this.setState({playlist: pl}))
+    }
+    onDeletePlaylistClick(){
+        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/delete`, {method:'DELETE'})
+        .then(() => this.props.history.push('/'))
+        .catch(err => console.log(err))
     }
     onLikeClick(){
         fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like/${this.state.user._id}`,{
@@ -99,6 +107,7 @@ class PlaylistDetails extends Component{
                 <button className="createSongBtn" onClick={this.onAddSongClick}>Add Song</button>:
                 null       
                 }
+
                 {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
 
                 {this.state.showLikeBtn ?
@@ -106,13 +115,17 @@ class PlaylistDetails extends Component{
                         null
                         :
                         <button className="likeSongBtn" onClick={this.onLikeClick}>Like Playlist</button>
+                :null}
+
+                {this.state.userIsPlaylistCreator ? 
+                <button className="editPlaylistBtn" onClick={this.onEditClick}>Edit Playlist</button>
+                :
+                null}
+                {this.state.userIsPlaylistCreator ?
+                <button className="deletePlaylistBtn" onClick={this.onDeletePlaylistClick}>Delete Playlist</button>
                 :
                 null}
 
-                {this.state.userIsPlaylistCreator ? 
-                <button className="editPlaylistBtn" onClick={this.onEditClick}>Edit Playlist</button>:
-                null
-                }
                 {this.state.showEditForm ? <EditPlaylist parentId={this.state.playlist._id}
                  title={this.state.playlist.title} imgUrl={this.state.playlist.imgUrl}/> : null}
 
@@ -130,6 +143,22 @@ class PlaylistDetails extends Component{
                 }
             </div>
             <style jsx="true">{`
+            .deletePlaylistBtn{
+                position:fixed;
+                top:20%;
+                left:790px;
+                background-color:#7289da;
+                border: none;
+                outline:none;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+                font-size:large;
+                text-decoration:none;
+                color:white;
+                border:none;
+                font-weight:400;
+            }
             .editPlaylistBtn{
                 position:fixed;
                 top:40%;
@@ -182,6 +211,9 @@ class PlaylistDetails extends Component{
                 cursor:pointer;
             }
             .editPlaylistBtn:hover{
+                cursor:pointer;
+            }
+            .deletePlaylistBtn:hover{
                 cursor:pointer;
             }
             .likeSongBtn:hover{
@@ -250,4 +282,4 @@ class PlaylistDetails extends Component{
     }
 }
 
-export default PlaylistDetails
+export default withRouter(PlaylistDetails)

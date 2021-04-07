@@ -34,6 +34,13 @@ router.delete('/:listId/delete/:songId', (req,res) => {
     .catch(err => console.log(err))
 })
 
+router.delete('/:listId/delete', (req,res) => {
+    console.log('a')
+    playlistService.deletePlaylist(req.params.listId)
+    .then(() => res.end())
+    .catch(err => console.log(err))
+})
+
 router.get('/:id/details', (req,res) =>{
     playlistService.getOne(req.params.id)
     .then(pl => {
