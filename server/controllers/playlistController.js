@@ -35,7 +35,6 @@ router.delete('/:listId/delete/:songId', (req,res) => {
 })
 
 router.delete('/:listId/delete', (req,res) => {
-    console.log('a')
     playlistService.deletePlaylist(req.params.listId)
     .then(() => res.end())
     .catch(err => console.log(err))

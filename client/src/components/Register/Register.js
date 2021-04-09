@@ -48,7 +48,7 @@ class Register extends Component{
             <style jsx="true">{`
                 form{
                     position:absolute;
-                    right:532px;
+                    left:451px;
                     top:56px;
                     display: flex;
                     flex-direction: column;

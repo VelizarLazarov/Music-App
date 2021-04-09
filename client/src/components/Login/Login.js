@@ -48,7 +48,7 @@ class Login extends Component{
             <style jsx="true">{`
                 form{
                     position:absolute;
-                    right:242px;
+                    right:497px;
                     top:56px;
                     display: flex;
                     flex-direction: column;
