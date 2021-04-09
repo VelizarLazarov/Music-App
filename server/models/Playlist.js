@@ -10,7 +10,8 @@ const playlistSchema = new mongoose.Schema({
         required:true
     },
     likes:{
-        type:Number
+        type:Number,
+        default:0
     },
     creator:{
         type:mongoose.Types.ObjectId,

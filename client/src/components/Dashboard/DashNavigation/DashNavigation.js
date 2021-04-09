@@ -1,15 +1,24 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 class DashNavigation extends Component {
+    constructor(props){
+        super(props)
+
+        this.sortBy = this.sortBy.bind(this);
+    }
+
+    sortBy(e){
+        let order = e.target.innerText
+        this.props.sortCategory(order.toLowerCase())
+    }
+
     render(){
         return (
             <>
                 <nav className="dashnav">
                     <ul>
-                        <li><Link to="/playlists/popular">Popular</Link></li>
-                        <li><Link to="/playlists/recent">Recent</Link></li>
-                        <input type="text" placeholder="Search.."></input>
+                        <li><button onClick={e =>this.sortBy(e)}>Popular</button></li>
+                        <li><button onClick={e =>this.sortBy(e)}>Recent</button></li>
                     </ul>
                 </nav>
                 <style jsx="true">{`          
@@ -18,23 +27,19 @@ class DashNavigation extends Component {
                         padding: 14px;                       
                         border-radius: 5px;                       
                     }
-                    .dashnav li a{
-                        text-align: center;
-                        text-decoration: none;
-                        font-size: 20px;
-                        color:white;
+                    .dashnav li button{
+                        margin-top:10px;
+                        background-color:#7289da;
+                        border: none;
+                        color: white;
+                        padding: 10px 22px;
+                        border-radius: 5px;
+                        font-size:large;
                     }
-                    .dashnav li:hover{
-                        background-color: #7289da;
+                    .dashnav li button:hover{
+                        cursor:pointer;
                         font-weight: bold;
                     }
-                    .dashnav input[type=text] {
-                        padding: 6px;
-                        margin-top: 12px;
-                        margin-left: 16px;
-                        font-size: 18px;
-                        font-weight: bold;
-                      }
                 `}</style>
             </>
         )
