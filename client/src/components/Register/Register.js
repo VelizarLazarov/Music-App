@@ -1,44 +1,33 @@
 import { Component } from 'react'
+import * as authService from '../../services/authService'
 
 class Register extends Component{
     constructor(props){
         super(props)
 
-        this.onRegisterSubmit = this.onRegisterSubmit.bind(this);
+        this.registerHandler = this.registerHandler.bind(this);
     }
 
-    onRegisterSubmit(e){
-        e.preventDefault();
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-        //const rePassword = e.target.repeatPassword.value;
-
-        fetch('http://localhost:5000/auth/register',{method:"POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({username,password})})
-        .then(() => {
-            e.target.reset();
-            this.props.handler();
-        })
-        
+    registerHandler(e){
+        e.preventDefault()
+        authService.onRegisterSubmit(e, this.props.handler)
     }
+
+   
 
     render(){
         return(
             <>
-            <form  onSubmit={this.onRegisterSubmit}>
+            <form  onSubmit={this.registerHandler}>
                 <h1>Register</h1>
 
-                <label for="username">Username:</label>
+                <label htmlFor="username">Username:</label>
                 <input type="text" name="username" placeholder="Username"></input>
 
-                <label for="password">Password:</label>
+                <label htmlFor="password">Password:</label>
                 <input type="text" name="password" placeholder="Password"></input>
 
-                <label for="repeatPassword">Repeat Password:</label>
+                <label htmlFor="repeatPassword">Repeat Password:</label>
                 <input id="repeatPassword"  name="repeatPassword" placeholder="Repeat Password"></input>
                 
                 <button type="submit">Register</button>

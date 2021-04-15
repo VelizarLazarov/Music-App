@@ -1,6 +1,7 @@
 import { Component } from "react";
 import DashNavigation from './DashNavigation/DashNavigation'
 import PlaylistCard from '../Playlist/PlaylistCard/PlaylistCard'
+import { getAllPlaylists, getSortedPlaylists } from '../../services/playlistService'
 
 class Dashboard extends Component{
     constructor(props){
@@ -15,8 +16,7 @@ class Dashboard extends Component{
     }
 
     componentDidMount(){
-        fetch(`http://localhost:5000/`)
-        .then(res => res.json())
+        getAllPlaylists()
         .then(res => this.setState({playlists: res}))
         .catch(error => console.log(error))
         
@@ -25,11 +25,9 @@ class Dashboard extends Component{
         if(this.state.sortOrder === prevState.sortOrder){
             return
         }
-        fetch(`http://localhost:5000/${this.state.sortOrder}`)
-        .then(res => res.json())
+        getSortedPlaylists(this.state.sortOrder)
         .then(res => {
-            if(this.state.mounted) this.setState({playlists: res})
-        console.log(this.state.playlists)})
+            if(this.state.mounted) this.setState({playlists: res})})
         .catch(error => console.log(error))
         
     }

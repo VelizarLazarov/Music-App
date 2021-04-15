@@ -1,38 +1,22 @@
 import { Component } from 'react'
+import * as authService from '../../services/authService'
 
 class Login extends Component{
     constructor(props){
         super(props)
 
-        this.onLoginSubmit = this.onLoginSubmit.bind(this);
+        this.onLoginSubmitHandler = this.onLoginSubmitHandler.bind(this);
     }
-
-    onLoginSubmit(e){
+    
+    onLoginSubmitHandler = (e) => {
         e.preventDefault()
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-
-        fetch('http://localhost:5000/auth/login',{method:"POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({username,password})})
-        .then(res => res.json())
-        .then(res => {
-            //console.log(res["token"])
-            window.localStorage.setItem("token",res["token"]); 
-            window.localStorage.setItem("username", username)   
-            this.props.handler();        
-        })
-        .then(() => {
-            e.target.reset()
-        })
+        authService.onLoginSubmit(e, this.props.handler)
     }
+    
     render(){
         return(
             <>
-            <form onSubmit={this.onLoginSubmit}>
+            <form onSubmit={this.onLoginSubmitHandler}>
                 <h1>Login</h1>
 
                 <label htmlFor="username">Username:</label>

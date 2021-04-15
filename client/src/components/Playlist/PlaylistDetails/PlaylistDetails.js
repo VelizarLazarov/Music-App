@@ -3,6 +3,8 @@ import Song from '../../Song/SongDetails/SongDetails'
 import CreateSong from '../../Song/CreateSong/CreateSong'
 import EditPlaylist from '../EditPlaylist/EditPlaylist'
 import { withRouter  } from 'react-router';
+import * as playlistService from '../../../services/playlistService'
+import * as authService from '../../../services/authService'
 
 
 class PlaylistDetails extends Component{
@@ -35,17 +37,16 @@ class PlaylistDetails extends Component{
 
     }
     onDeleteSongClick(songId){
-        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/delete/${songId}`, {method:'DELETE'})
+        playlistService.deleteSong(songId, this.props.match.params.id)
         .then(pl => this.setState({playlist: pl}))
     }
     onDeletePlaylistClick(){
-        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/delete`, {method:'DELETE'})
+        playlistService.deletePlaylist(this.props.match.params.id)
         .then(() => this.props.history.push('/'))
         .catch(err => console.log(err))
     }
     onLikeClick(){
-        fetch(`http://localhost:5000/playlist/${this.props.match.params.id}/like/${this.state.user._id}`,{
-        })
+        playlistService.likePlaylist(this.props.match.params.id, this.state.user._id)
         .then(() => {
             if(this.mounted) {
                 this.setState({...this.state, likes:this.state.likes + 1})
@@ -57,9 +58,10 @@ class PlaylistDetails extends Component{
 
     componentDidMount(){
         Promise.all([
-            fetch(`http://localhost:5000${this.props.match.url}`).then(res => res.json()),
+            playlistService.getPlaylist(this.props.match.url),
+
             window.localStorage.getItem("username") ?
-            fetch(`http://localhost:5000/auth/getUser/${window.localStorage.getItem("username")}`).then(res => res.json())
+                authService.getUser(window.localStorage.getItem("username"))
             : null
         ]).then(([playlistData, userData]) => {
             if(this.mounted){
@@ -77,8 +79,7 @@ class PlaylistDetails extends Component{
     }
 
     componentDidUpdate(prevProps,prevState){
-        fetch(`http://localhost:5000${this.props.match.url}`)
-        .then(res => res.json())
+        playlistService.getPlaylist(this.props.match.url)
         .then(res => {
             if(this.mounted) this.setState({playlist: res})
         })

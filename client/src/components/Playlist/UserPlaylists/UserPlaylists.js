@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import PlaylistCard from '../PlaylistCard/PlaylistCard'
+import * as playlistService from '../../../services/playlistService';
 
 const UserPlaylists = () => {
     const [playlists, setPlaylists] = useState([]);
@@ -8,8 +9,7 @@ const UserPlaylists = () => {
     useEffect(() => {
          async function fetchPlaylists(){
 
-            await fetch(`http://localhost:5000/playlist/createdBy/${window.localStorage.getItem("username")}`)
-            .then(res => res.json())
+            await playlistService.getUserPlaylist(window.localStorage.getItem("username"))
             .then(playlistsData => setPlaylists(playlistsData))
             .catch(error => console.log(error))
         }

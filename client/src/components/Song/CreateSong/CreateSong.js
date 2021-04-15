@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { createSong } from '../../../services/playlistService'
 
 class CreateSongBtn extends Component {
     constructor(props){
@@ -8,18 +9,8 @@ class CreateSongBtn extends Component {
     }
     onAddSongClick(e){
         e.preventDefault();
-        let songObj = {
-            title: e.target.title.value,
-            artist: e.target.artist.value,
-            songLink: e.target.songLink.value
-        }
-        fetch(`http://localhost:5000/playlist/${this.props.parentId}/addSong`,{
-            method:'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(songObj)
-        })
+       
+        createSong(e, this.props.parentId)
         .then(() =>{
             e.target.reset()
         })

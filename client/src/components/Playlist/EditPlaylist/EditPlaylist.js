@@ -1,20 +1,12 @@
+import * as playlistService from '../../../services/playlistService'
 
 const EditPlaylist = (props) => {
     function onEditSubmit(e){
         e.preventDefault();
-        let playlistObj = {
-            title: e.target.title.value,
-            imgUrl: e.target.imgUrl.value
-        }
-
-        fetch(`http://localhost:5000/playlist/${props.parentId}/update`,{
-            method:'PATCH', 
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(playlistObj)
-        })
+        
+        playlistService.editPlaylist(e, props.parentId)
     }
+    
     return(
         <>
             <form onSubmit={onEditSubmit}>

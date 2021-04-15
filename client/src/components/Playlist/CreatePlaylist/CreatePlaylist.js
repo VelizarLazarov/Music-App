@@ -1,22 +1,12 @@
 import { Component } from 'react'
 import { withRouter  } from 'react-router';
+import * as playlistService from '../../../services/playlistService'
 
 class CreatePlaylist extends Component{
 
     onCreatePlaylistClick(e){
         e.preventDefault()
-        let playlistObj ={
-            title: e.target.title.value,
-            imgUrl: e.target.thumbnail.value
-        }
-        fetch(`http://localhost:5000/playlist/createPlaylist/${window.localStorage.getItem("username")}`,{
-            method:'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(playlistObj)
-        })
-        .then(res => res.json())
+        playlistService.createPlaylist(e)
         .then(playlist =>{
             e.target.reset()
             this.props.history.push(`/playlist/${playlist._id}/details`)
