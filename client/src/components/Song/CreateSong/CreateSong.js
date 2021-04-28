@@ -4,16 +4,25 @@ import { createSong } from '../../../services/playlistService'
 class CreateSongBtn extends Component {
     constructor(props){
         super(props)
-
-        this.onAddSongClick = this.onAddSongClick.bind(this)
+        this.state = {
+            selectedFile: null
+        }
+        this.onAddSongClick = this.onAddSongClick.bind(this);
+        this.fileChangeHandler = this.fileChangeHandler.bind(this)
     }
     onAddSongClick(e){
         e.preventDefault();
        
-        createSong(e, this.props.parentId)
-        .then(() =>{
+        createSong(e, this.props.parentId, this.state.selectedFile)
+        .then((song) =>{
+            this.props.songHandler(song)
             e.target.reset()
         })
+    }
+
+    fileChangeHandler(e){
+        this.setState({selectedFile: e.target.files[0]})
+        
     }
     render() {
         return (
@@ -27,8 +36,8 @@ class CreateSongBtn extends Component {
                 <label htmlFor="artist">Artist:</label>
                 <input type="text" name="artist" placeholder="Artist"></input>
 
-                <label htmlFor="artist">File Upload:</label>
-                <input type="file" name="songFile"  accept="audio/*"></input>
+                <label htmlFor="songFile">File Upload:</label>
+                <input type="file" name="songFile" accept="audio/*" onChange={this.fileChangeHandler}></input>
 
                 <h2>Or youtube link</h2>
 

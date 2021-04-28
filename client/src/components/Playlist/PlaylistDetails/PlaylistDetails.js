@@ -12,29 +12,37 @@ class PlaylistDetails extends Component{
         super(props)
 
         this.state = {
-            showEditForm:false,
+            showEditForm: false,
             showSongForm: false,
             showLikeBtn: false,
             playlist: {},
-            user:{},
+            user: {},
             userHasLiked: false,
             userIsPlaylistCreator: false
         }
         this.mounted = true;
         this.onAddSongClick = this.onAddSongClick.bind(this);
+        this.onAddSongSubmit = this.onAddSongSubmit.bind(this);
         this.onLikeClick = this.onLikeClick.bind(this);
         this.onDeleteSongClick = this.onDeleteSongClick.bind(this);
         this.onDeletePlaylistClick = this.onDeletePlaylistClick.bind(this);
         this.onEditClick = this.onEditClick.bind(this);
+        this.onEditSubmit = this.onEditSubmit.bind(this);
     }
 
     onEditClick(){
         this.setState({showEditForm:!this.state.showEditForm});
     }
+    onEditSubmit(newList){
+        this.setState({playlist:newList});
+    }
 
     onAddSongClick(){
         this.setState({showSongForm:!this.state.showSongForm});
-
+    }
+    onAddSongSubmit(song){
+        let addedSongState = {...this.state.playlist, songs: [...this.state.playlist.songs, song]}
+        this.setState({playlist: addedSongState})        
     }
     onDeleteSongClick(songId){
         playlistService.deleteSong(songId, this.props.match.params.id)
@@ -79,14 +87,16 @@ class PlaylistDetails extends Component{
     }
 
     componentDidUpdate(prevProps,prevState){
+        if(JSON.stringify(prevState.playlist) === JSON.stringify(this.state.playlist)){
+            console.log(JSON.stringify(prevState.playlist))
+            console.log(JSON.stringify(this.state.playlist))
+           return
+        }
         playlistService.getPlaylist(this.props.match.url)
         .then(res => {
             if(this.mounted) this.setState({playlist: res})
         })
         .catch(err => console.log(err))    
-        if(JSON.stringify(prevState.playlist) === JSON.stringify(this.state.playlist)){
-           return
-        }
         
     }
 
@@ -109,7 +119,8 @@ class PlaylistDetails extends Component{
                 null       
                 }
 
-                {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id}/> : null }
+                {this.state.showSongForm ? <CreateSong parentId={this.state.playlist._id} songHandler={this.onAddSongSubmit}/>
+                : null }
 
                 {this.state.showLikeBtn ?
                     this.state.userHasLiked ? 
@@ -128,7 +139,7 @@ class PlaylistDetails extends Component{
                 null}
 
                 {this.state.showEditForm ? <EditPlaylist parentId={this.state.playlist._id}
-                 title={this.state.playlist.title} imgUrl={this.state.playlist.imgUrl}/> : null}
+                 title={this.state.playlist.title} imgUrl={this.state.playlist.imgUrl} editHandler={this.onEditSubmit}/> : null}
 
             </div>
             <div className="playlistBody">

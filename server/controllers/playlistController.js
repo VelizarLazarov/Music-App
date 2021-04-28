@@ -7,7 +7,7 @@ router.patch('/:id/update', (req,res) =>{
         let imgUrl = req.body.imgUrl
 
     playlistService.updatePlaylist(req.params.id, title, imgUrl)
-    .then(() => res.end())
+    .then((list) => res.send(list))
     .catch(err => console.log(err))
 })
 
@@ -66,7 +66,7 @@ router.post('/:id/addSong', (req,res) => {
     playlistService.createSong(songObj)
     .then(song => {
         playlistService.addSongToList(req.params.id, song._id)
-        .then(()=>res.end())
+        .then(()=>res.send(song))
     })
     .catch(err => console.log(err))
 })

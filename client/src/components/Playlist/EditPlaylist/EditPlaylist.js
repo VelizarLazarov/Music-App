@@ -5,6 +5,7 @@ const EditPlaylist = (props) => {
         e.preventDefault();
         
         playlistService.editPlaylist(e, props.parentId)
+        .then((newList) => props.editHandler(newList))
     }
     
     return(
